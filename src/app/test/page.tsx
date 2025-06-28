@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo, useEffect, Suspense } from 'react';
@@ -13,7 +14,6 @@ import { useToast } from '@/hooks/use-toast';
 
 import { cn } from "@/lib/utils";
 import { type Language, getTranslations, getResponseOptions } from '@/lib/i18n';
-import { questions } from '@/data/questions';
 import { analyzePersonality } from '@/ai/flows/analyze-personality';
 
 function PersonalityTest() {
@@ -28,6 +28,7 @@ function PersonalityTest() {
   const [error, setError] = useState<string | null>(null);
   
   const [isAnimating, setIsAnimating] = useState(false);
+  const [questions, setQuestions] = useState<{ id: number; text: string; }[]>([]);
 
   useEffect(() => {
     const langParam = searchParams.get('lang') as Language | null;
@@ -39,11 +40,22 @@ function PersonalityTest() {
   const t = useMemo(() => getTranslations(lang), [lang]);
   const responseOptions = useMemo(() => getResponseOptions(t), [t]);
 
-  const progress = (currentQuestionIndex / questions.length) * 100;
+  useEffect(() => {
+    if (t.questions) {
+      const questionKeys = Object.keys(t.questions);
+      const formattedQuestions = questionKeys.map(key => ({
+        id: parseInt(key, 10),
+        text: t.questions[key],
+      }));
+      setQuestions(formattedQuestions);
+    }
+  }, [t]);
+
+  const progress = questions.length > 0 ? (currentQuestionIndex / questions.length) * 100 : 0;
   const currentQuestion = questions[currentQuestionIndex];
 
   const handleAnswer = (answer: number) => {
-    if (isAnimating) return;
+    if (isAnimating || questions.length === 0) return;
 
     setIsAnimating(true);
     const newAnswers = [...answers, answer];
@@ -59,7 +71,7 @@ function PersonalityTest() {
   
   useEffect(() => {
     const submitAnswers = async () => {
-      if (answers.length === questions.length) {
+      if (questions.length > 0 && answers.length === questions.length) {
         setIsLoading(true);
         setError(null);
         try {
@@ -87,7 +99,7 @@ function PersonalityTest() {
       }
     };
     submitAnswers();
-  }, [answers, lang, router, t, toast]);
+  }, [answers, lang, router, t, toast, questions.length]);
 
   const getOptionStyle = (value: number) => {
     switch (value) {
@@ -102,7 +114,7 @@ function PersonalityTest() {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || questions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center">
         <LoaderCircle className="w-12 h-12 animate-spin text-primary mb-4" />
@@ -147,11 +159,10 @@ function PersonalityTest() {
         <Card key={currentQuestionIndex} className={`shadow-xl transition-all duration-300 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
           <CardHeader>
             <CardTitle className="text-2xl font-semibold text-center leading-tight">
-              {t.questions[currentQuestion.id.toString()]}
+              {currentQuestion?.text}
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 pt-2">
-             <span className="text-sm font-medium text-destructive">{t.disagree}</span>
+          <CardContent className="flex flex-col items-center gap-3 p-6">
              <div className="flex w-full justify-center items-center gap-1.5 sm:gap-2">
               {responseOptions.map(({ value, label }) => (
                 <button
@@ -169,7 +180,10 @@ function PersonalityTest() {
                 </button>
               ))}
              </div>
-             <span className="text-sm font-medium text-primary">{t.agree}</span>
+            <div className="flex justify-between w-full max-w-xs sm:max-w-sm">
+                <span className="text-sm font-medium text-destructive">{t.disagree}</span>
+                <span className="text-sm font-medium text-primary">{t.agree}</span>
+            </div>
           </CardContent>
         </Card>
       </div>
