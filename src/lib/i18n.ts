@@ -31,6 +31,10 @@ type TranslationSet = {
   weaknesses: string;
   relationships: string;
   careerPaths: string;
+  shareResults: string;
+  linkCopied: string;
+  linkCopyError: string;
+  shareTitle: string;
 };
 
 
@@ -119,6 +123,10 @@ export const translations: Record<Language, TranslationSet> = {
     weaknesses: '약점',
     relationships: '인간관계',
     careerPaths: '추천 직업',
+    shareResults: '결과 공유하기',
+    linkCopied: '링크가 클립보드에 복사되었습니다!',
+    linkCopyError: '링크를 복사할 수 없습니다:',
+    shareTitle: '결과 공유',
   },
   en: {
     welcomeTitle: 'Discover Your Personality Type',
@@ -204,6 +212,10 @@ export const translations: Record<Language, TranslationSet> = {
     weaknesses: 'Weaknesses',
     relationships: 'Relationships',
     careerPaths: 'Career Paths',
+    shareResults: 'Share Results',
+    linkCopied: 'Link copied to clipboard!',
+    linkCopyError: 'Could not copy link:',
+    shareTitle: 'Share Your Results',
   },
   ja: {
     welcomeTitle: 'あなたの性格タイプを発見する',
@@ -289,6 +301,10 @@ export const translations: Record<Language, TranslationSet> = {
     weaknesses: '弱み',
     relationships: '人間関係',
     careerPaths: 'おすすめの職業',
+    shareResults: '結果を共有する',
+    linkCopied: 'リンクがクリップボードにコピーされました！',
+    linkCopyError: 'リンクをコピーできませんでした:',
+    shareTitle: '結果を共有',
   },
   zh: {
     welcomeTitle: '发现您的性格类型',
@@ -374,6 +390,10 @@ export const translations: Record<Language, TranslationSet> = {
     weaknesses: '缺点',
     relationships: '人际关系',
     careerPaths: '推荐职业',
+    shareResults: '分享结果',
+    linkCopied: '链接已复制到剪贴板！',
+    linkCopyError: '无法复制链接：',
+    shareTitle: '分享你的结果',
   },
   es: {
     welcomeTitle: 'Descubre tu tipo de personalidad',
@@ -459,6 +479,10 @@ export const translations: Record<Language, TranslationSet> = {
     weaknesses: 'Debilidades',
     relationships: 'Relaciones',
     careerPaths: 'Carreras Profesionales',
+    shareResults: 'Compartir Resultados',
+    linkCopied: '¡Enlace copiado al portapapeles!',
+    linkCopyError: 'No se pudo copiar el enlace:',
+    shareTitle: 'Comparte tus resultados',
   },
 };
 

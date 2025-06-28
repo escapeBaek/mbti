@@ -3,7 +3,7 @@
 import React, { useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Award, BarChart, Brain, Users, Briefcase, Sparkles, ShieldAlert, HeartHandshake } from 'lucide-react';
+import { Award, BarChart, Brain, Users, Briefcase, Sparkles, ShieldAlert, HeartHandshake, Share2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { type Language, getTranslations } from '@/lib/i18n';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
 
 const personalityIcons: { [key: string]: React.ElementType } = {
   "Analysts": Brain,
@@ -29,6 +30,7 @@ const personalityGroups: { [key: string]: string } = {
 
 function ResultsDisplay() {
   const searchParams = useSearchParams();
+  const { toast } = useToast();
   const lang = (searchParams.get('lang') as Language) || 'ko';
   const personalityType = searchParams.get('type');
   const description = searchParams.get('desc');
@@ -42,6 +44,35 @@ function ResultsDisplay() {
   const strengths = useMemo(() => strengthsParam ? JSON.parse(strengthsParam) : null, [strengthsParam]);
   const weaknesses = useMemo(() => weaknessesParam ? JSON.parse(weaknessesParam) : null, [weaknessesParam]);
   const careerPaths = useMemo(() => careerPathsParam ? JSON.parse(careerPathsParam) : null, [careerPathsParam]);
+
+  const handleShare = async () => {
+    if (!personalityType || !description) return;
+
+    const shareData = {
+      title: `${t.shareTitle}: ${personalityType}`,
+      text: description,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast({
+          description: t.linkCopied,
+        });
+      }
+    } catch (err) {
+      console.error('Share failed:', err);
+      toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: `${t.linkCopyError} ${err}`,
+      });
+    }
+  };
+
 
   if (!personalityType || !description || !strengths || !weaknesses || !careerPaths || !relationships) {
     return <ResultsSkeleton t={t} />;
@@ -121,10 +152,14 @@ function ResultsDisplay() {
                 </Accordion>
             </div>
         </CardContent>
-        <CardFooter>
-          <Button asChild size="lg" className="w-full text-lg">
-            <Link href={`/?lang=${lang}`}>{t.takeAgain}</Link>
-          </Button>
+        <CardFooter className="flex-col sm:flex-row gap-2 w-full">
+            <Button onClick={handleShare} size="lg" variant="outline" className="w-full text-lg">
+                <Share2 className="h-5 w-5" />
+                {t.shareResults}
+            </Button>
+            <Button asChild size="lg" className="w-full text-lg">
+                <Link href={`/?lang=${lang}`}>{t.takeAgain}</Link>
+            </Button>
         </CardFooter>
         <style jsx>{`
             @keyframes fade-in {
@@ -166,7 +201,10 @@ function ResultsSkeleton({ t }: {t: any}) {
                         </div>
                     </div>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="flex-col sm:flex-row gap-2 w-full">
+                     <Button size="lg" className="w-full text-lg" disabled>
+                        {t.shareResults}
+                    </Button>
                     <Button size="lg" className="w-full text-lg" disabled>
                         {t.takeAgain}
                     </Button>
