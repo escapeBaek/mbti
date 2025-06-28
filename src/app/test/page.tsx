@@ -81,7 +81,7 @@ function PersonalityTest() {
       }
     };
     submitAnswers();
-  }, [answers, lang, router, t.analysisError, toast]);
+  }, [answers, lang, router, t, toast]);
 
   if (isLoading) {
     return (
@@ -120,7 +120,7 @@ function PersonalityTest() {
         <Card key={currentQuestionIndex} className={`shadow-xl transition-all duration-300 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
           <CardHeader>
             <CardTitle className="text-2xl font-semibold text-center leading-tight">
-              {currentQuestion.text}
+              {t.questions[currentQuestion.id] || currentQuestion.text}
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-2 p-4 pt-0">
