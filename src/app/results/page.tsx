@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useMemo, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Award, BarChart, Brain, Users, Briefcase } from 'lucide-react';
+import { Award, BarChart, Brain, Users, Briefcase, Sparkles, ShieldAlert, HeartHandshake } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { type Language, getTranslations } from '@/lib/i18n';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -31,10 +32,18 @@ function ResultsDisplay() {
   const lang = (searchParams.get('lang') as Language) || 'ko';
   const personalityType = searchParams.get('type');
   const description = searchParams.get('desc');
+  const strengthsParam = searchParams.get('strengths');
+  const weaknessesParam = searchParams.get('weaknesses');
+  const careerPathsParam = searchParams.get('careerPaths');
+  const relationships = searchParams.get('relationships');
 
   const t = useMemo(() => getTranslations(lang), [lang]);
   
-  if (!personalityType || !description) {
+  const strengths = useMemo(() => strengthsParam ? JSON.parse(strengthsParam) : null, [strengthsParam]);
+  const weaknesses = useMemo(() => weaknessesParam ? JSON.parse(weaknessesParam) : null, [weaknessesParam]);
+  const careerPaths = useMemo(() => careerPathsParam ? JSON.parse(careerPathsParam) : null, [careerPathsParam]);
+
+  if (!personalityType || !description || !strengths || !weaknesses || !careerPaths || !relationships) {
     return <ResultsSkeleton t={t} />;
   }
   
@@ -60,9 +69,56 @@ function ResultsDisplay() {
                 {description}
             </p>
             <Separator className="my-4" />
-            <div className="text-center">
-                <h3 className="text-xl font-semibold mb-2">Detailed Insights</h3>
-                <p className="text-muted-foreground">More detailed analysis about your personality type will be available soon.</p>
+            <div className="text-left">
+                <h3 className="text-xl font-semibold mb-2 text-center">{t.detailedInsights}</h3>
+                <Accordion type="single" collapsible className="w-full" defaultValue="strengths">
+                    <AccordionItem value="strengths">
+                        <AccordionTrigger className="text-lg hover:no-underline">
+                            <div className="flex items-center">
+                                <Sparkles className="h-5 w-5 mr-3 text-yellow-500" /> {t.strengths}
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                            <ul className="list-disc pl-5 space-y-2 text-foreground/90">
+                                {strengths.map((s: string, i: number) => <li key={i}>{s}</li>)}
+                            </ul>
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="weaknesses">
+                        <AccordionTrigger className="text-lg hover:no-underline">
+                           <div className="flex items-center">
+                                <ShieldAlert className="h-5 w-5 mr-3 text-red-500" /> {t.weaknesses}
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                            <ul className="list-disc pl-5 space-y-2 text-foreground/90">
+                                {weaknesses.map((w: string, i: number) => <li key={i}>{w}</li>)}
+                            </ul>
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="relationships">
+                        <AccordionTrigger className="text-lg hover:no-underline">
+                            <div className="flex items-center">
+                                <HeartHandshake className="h-5 w-5 mr-3 text-pink-500" /> {t.relationships}
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="text-foreground/90 leading-relaxed">
+                            {relationships}
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="careerPaths">
+                        <AccordionTrigger className="text-lg hover:no-underline">
+                           <div className="flex items-center">
+                                <Briefcase className="h-5 w-5 mr-3 text-blue-500" /> {t.careerPaths}
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                            <ul className="list-disc pl-5 space-y-2 text-foreground/90">
+                                {careerPaths.map((c: string, i: number) => <li key={i}>{c}</li>)}
+                            </ul>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
             </div>
         </CardContent>
         <CardFooter>
@@ -98,8 +154,17 @@ function ResultsSkeleton({ t }: {t: any}) {
                     <Separator className="my-4" />
                     <Skeleton className="h-5 w-full mb-2" />
                     <Skeleton className="h-5 w-full mb-2" />
-                    <Skeleton className="h-5 w-3/4" />
+                    <Skeleton className="h-5 w-3/4 mb-4" />
                     <Separator className="my-4" />
+                     <div className="text-left">
+                        <Skeleton className="h-8 w-48 mb-4 mx-auto" />
+                        <div className="space-y-2">
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                        </div>
+                    </div>
                 </CardContent>
                 <CardFooter>
                     <Button size="lg" className="w-full text-lg" disabled>

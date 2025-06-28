@@ -26,6 +26,11 @@ type TranslationSet = {
   responseStrongly: string;
   responseSlightly: string;
   questions: Record<string, string>;
+  detailedInsights: string;
+  strengths: string;
+  weaknesses: string;
+  relationships: string;
+  careerPaths: string;
 };
 
 
@@ -108,7 +113,12 @@ export const translations: Record<Language, TranslationSet> = {
       "58": "강력한 것보다 다른 사람들에게 사랑받는 것이 더 보람 있다고 믿습니다.",
       "59": "책, 예술, 영화 등 비전통적이고 모호한 것에 항상 관심이 있었습니다.",
       "60": "사교 상황에서 종종 주도권을 잡습니다."
-    }
+    },
+    detailedInsights: '상세 분석',
+    strengths: '강점',
+    weaknesses: '약점',
+    relationships: '인간관계',
+    careerPaths: '추천 직업',
   },
   en: {
     welcomeTitle: 'Discover Your Personality Type',
@@ -188,7 +198,12 @@ export const translations: Record<Language, TranslationSet> = {
       "58": "You believe that it is more rewarding to be liked by others than to be powerful.",
       "59": "You have always been interested in unconventional and ambiguous things, e.g., in books, art, or movies.",
       "60": "You often take the initiative in social situations."
-    }
+    },
+    detailedInsights: 'Detailed Insights',
+    strengths: 'Strengths',
+    weaknesses: 'Weaknesses',
+    relationships: 'Relationships',
+    careerPaths: 'Career Paths',
   },
   ja: {
     welcomeTitle: 'あなたの性格タイプを発見する',
@@ -268,7 +283,12 @@ export const translations: Record<Language, TranslationSet> = {
       "58": "権力を持つことよりも、他人に好かれることの方がやりがいがあると信じています。",
       "59": "本、芸術、映画など、型にはまらない曖昧なものに常に興味を持っていました。",
       "60": "社交的な状況でしばしば率先して行動します。"
-    }
+    },
+    detailedInsights: '詳細分析',
+    strengths: '強み',
+    weaknesses: '弱み',
+    relationships: '人間関係',
+    careerPaths: 'おすすめの職業',
   },
   zh: {
     welcomeTitle: '发现您的性格类型',
@@ -348,7 +368,12 @@ export const translations: Record<Language, TranslationSet> = {
       "58": "你相信受人喜爱比拥有权力更有价值。",
       "59": "你一直对非传统和模棱两可的事物感兴趣，例如书籍、艺术或电影。",
       "60": "你经常在社交场合中采取主动。"
-    }
+    },
+    detailedInsights: '详细分析',
+    strengths: '优点',
+    weaknesses: '缺点',
+    relationships: '人际关系',
+    careerPaths: '推荐职业',
   },
   es: {
     welcomeTitle: 'Descubre tu tipo de personalidad',
@@ -428,18 +453,23 @@ export const translations: Record<Language, TranslationSet> = {
       "58": "Crees que es más gratificante ser querido por los demás que ser poderoso.",
       "59": "Siempre te han interesado las cosas poco convencionales y ambiguas, por ejemplo, en libros, arte o películas.",
       "60": "A menudo tomas la iniciativa en situaciones sociales."
-    }
+    },
+    detailedInsights: 'Análisis Detallado',
+    strengths: 'Fortalezas',
+    weaknesses: 'Debilidades',
+    relationships: 'Relaciones',
+    careerPaths: 'Carreras Profesionales',
   },
 };
 
 export const getTranslations = (lang: Language) => translations[lang];
 
 export const getResponseOptions = (t: (typeof translations)[Language]) => [
-  { value: 1, label: `${t.responseStrongly} ${t.disagree}` },
-  { value: 2, label: t.disagree },
-  { value: 3, label: `${t.responseSlightly} ${t.disagree}` },
-  { value: 4, label: t.neutral },
-  { value: 5, label: `${t.responseSlightly} ${t.agree}` },
-  { value: 6, label: t.agree },
   { value: 7, label: `${t.responseStrongly} ${t.agree}` },
+  { value: 6, label: t.agree },
+  { value: 5, label: `${t.responseSlightly} ${t.agree}` },
+  { value: 4, label: t.neutral },
+  { value: 3, label: `${t.responseSlightly} ${t.disagree}` },
+  { value: 2, label: t.disagree },
+  { value: 1, label: `${t.responseStrongly} ${t.disagree}` },
 ];

@@ -67,6 +67,10 @@ function PersonalityTest() {
             lang,
             type: result.personalityType,
             desc: result.description,
+            strengths: JSON.stringify(result.strengths),
+            weaknesses: JSON.stringify(result.weaknesses),
+            careerPaths: JSON.stringify(result.careerPaths),
+            relationships: result.relationships,
           });
           router.push(`/results?${params.toString()}`);
         } catch (e) {

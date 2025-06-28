@@ -27,7 +27,11 @@ export type AnalyzePersonalityInput = z.infer<typeof AnalyzePersonalityInputSche
 
 const AnalyzePersonalityOutputSchema = z.object({
   personalityType: z.string().describe('The four-letter personality type (e.g., INFJ).'),
-  description: z.string().describe('A brief description of the personality type.'),
+  description: z.string().describe('A brief, one-paragraph description of the personality type.'),
+  strengths: z.array(z.string()).describe('A list of 3-5 key strengths for this personality type.'),
+  weaknesses: z.array(z.string()).describe('A list of 3-5 key weaknesses for this personality type.'),
+  careerPaths: z.array(z.string()).describe('A list of 3-5 recommended career paths for this personality type.'),
+  relationships: z.string().describe('A paragraph describing their approach to relationships.'),
 });
 export type AnalyzePersonalityOutput = z.infer<typeof AnalyzePersonalityOutputSchema>;
 
@@ -39,13 +43,20 @@ const prompt = ai.definePrompt({
   name: 'analyzePersonalityPrompt',
   input: {schema: AnalyzePersonalityInputSchema},
   output: {schema: AnalyzePersonalityOutputSchema},
-  prompt: `Analyze the user's responses to a personality test and determine their personality type according to the 16Personalities model. Provide the four-letter personality type and a brief description in the specified language.
+  prompt: `Analyze the user's responses to a personality test and determine their personality type according to the 16Personalities model.
 
-Responses: {{{responses}}}
-Language: {{{language}}}
+Based on the determined personality type, provide a detailed analysis in the specified language. This analysis should include:
+1. The four-letter personality type (e.g., INFJ).
+2. A brief, one-paragraph description of the personality type.
+3. A list of 3-5 key strengths.
+4. A list of 3-5 key weaknesses.
+5. A list of 3-5 recommended career paths.
+6. A paragraph describing their approach to relationships.
 
-Respond in {{{language}}}. Return the personality type and a brief description.
-`,
+User's Responses (a series of numbers from 1-7): {{{responses}}}
+Language for the output: {{{language}}}
+
+Respond entirely in the requested language.`,
 });
 
 const analyzePersonalityFlow = ai.defineFlow(
