@@ -137,7 +137,7 @@ function ResultsDisplay() {
                     <AccordionItem value="strengths">
                         <AccordionTrigger className="text-lg hover:no-underline">
                             <div className="flex items-center">
-                                <Sparkles className="h-5 w-5 mr-3 text-yellow-500" /> {t.strengths}
+                                <Sparkles className="h-5 w-5 mr-3 text-accent" /> {t.strengths}
                             </div>
                         </AccordionTrigger>
                         <AccordionContent>
@@ -149,7 +149,7 @@ function ResultsDisplay() {
                     <AccordionItem value="weaknesses">
                         <AccordionTrigger className="text-lg hover:no-underline">
                            <div className="flex items-center">
-                                <ShieldAlert className="h-5 w-5 mr-3 text-red-500" /> {t.weaknesses}
+                                <ShieldAlert className="h-5 w-5 mr-3 text-destructive" /> {t.weaknesses}
                             </div>
                         </AccordionTrigger>
                         <AccordionContent>
@@ -161,7 +161,7 @@ function ResultsDisplay() {
                     <AccordionItem value="relationships">
                         <AccordionTrigger className="text-lg hover:no-underline">
                             <div className="flex items-center">
-                                <HeartHandshake className="h-5 w-5 mr-3 text-pink-500" /> {t.relationships}
+                                <HeartHandshake className="h-5 w-5 mr-3 text-primary" /> {t.relationships}
                             </div>
                         </AccordionTrigger>
                         <AccordionContent className="text-foreground/90 leading-relaxed">
@@ -171,7 +171,7 @@ function ResultsDisplay() {
                     <AccordionItem value="careerPaths">
                         <AccordionTrigger className="text-lg hover:no-underline">
                            <div className="flex items-center">
-                                <Briefcase className="h-5 w-5 mr-3 text-blue-500" /> {t.careerPaths}
+                                <Briefcase className="h-5 w-5 mr-3 text-primary" /> {t.careerPaths}
                             </div>
                         </AccordionTrigger>
                         <AccordionContent>

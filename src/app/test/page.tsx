@@ -91,13 +91,13 @@ function PersonalityTest() {
 
   const getOptionStyle = (value: number) => {
     switch (value) {
-      case 1: return 'w-10 h-10 sm:w-12 sm:h-12 bg-red-600 hover:bg-red-700';
-      case 2: return 'w-8 h-8 sm:w-10 sm:h-10 bg-red-500 hover:bg-red-600';
-      case 3: return 'w-7 h-7 sm:w-8 sm:h-8 bg-red-400 hover:bg-red-500';
-      case 4: return 'w-6 h-6 sm:w-7 sm:h-7 bg-slate-400 hover:bg-slate-500';
-      case 5: return 'w-7 h-7 sm:w-8 sm:h-8 bg-green-400 hover:bg-green-500';
-      case 6: return 'w-8 h-8 sm:w-10 sm:h-10 bg-green-500 hover:bg-green-600';
-      case 7: return 'w-10 h-10 sm:w-12 sm:h-12 bg-green-600 hover:bg-green-700';
+      case 1: return 'w-10 h-10 sm:w-12 sm:h-12 bg-destructive hover:bg-destructive/90';
+      case 2: return 'w-8 h-8 sm:w-10 sm:h-10 bg-destructive/75 hover:bg-destructive/65';
+      case 3: return 'w-7 h-7 sm:w-8 sm:h-8 bg-destructive/50 hover:bg-destructive/40';
+      case 4: return 'w-6 h-6 sm:w-7 sm:h-7 bg-muted hover:bg-muted-foreground/20';
+      case 5: return 'w-7 h-7 sm:w-8 sm:h-8 bg-primary/50 hover:bg-primary/40';
+      case 6: return 'w-8 h-8 sm:w-10 sm:h-10 bg-primary/75 hover:bg-primary/65';
+      case 7: return 'w-10 h-10 sm:w-12 sm:h-12 bg-primary hover:bg-primary/90';
       default: return 'h-8 w-8';
     }
   };
@@ -151,7 +151,7 @@ function PersonalityTest() {
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 pt-2">
-             <span className="text-sm font-medium text-red-600">{t.disagree}</span>
+             <span className="text-sm font-medium text-destructive">{t.disagree}</span>
              <div className="flex w-full justify-center items-center gap-1.5 sm:gap-2">
               {responseOptions.map(({ value, label }) => (
                 <button
@@ -169,7 +169,7 @@ function PersonalityTest() {
                 </button>
               ))}
              </div>
-             <span className="text-sm font-medium text-green-600">{t.agree}</span>
+             <span className="text-sm font-medium text-primary">{t.agree}</span>
           </CardContent>
         </Card>
       </div>
