@@ -1,0 +1,121 @@
+"use client";
+
+import React, { useMemo, Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Award, BarChart, Brain, Users, Briefcase } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { type Language, getTranslations } from '@/lib/i18n';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const personalityIcons: { [key: string]: React.ElementType } = {
+  "Analysts": Brain,
+  "Diplomats": Users,
+  "Sentinels": Briefcase,
+  "Explorers": BarChart,
+  "Default": Award,
+};
+
+const personalityGroups: { [key: string]: string } = {
+  'INTJ': 'Analysts', 'INTP': 'Analysts', 'ENTJ': 'Analysts', 'ENTP': 'Analysts',
+  'INFJ': 'Diplomats', 'INFP': 'Diplomats', 'ENFJ': 'Diplomats', 'ENFP': 'Diplomats',
+  'ISTJ': 'Sentinels', 'ISFJ': 'Sentinels', 'ESTJ': 'Sentinels', 'ESFJ': 'Sentinels',
+  'ISTP': 'Explorers', 'ISFP': 'Explorers', 'ESTP': 'Explorers', 'ESFP': 'Explorers',
+};
+
+function ResultsDisplay() {
+  const searchParams = useSearchParams();
+  const lang = (searchParams.get('lang') as Language) || 'ko';
+  const personalityType = searchParams.get('type');
+  const description = searchParams.get('desc');
+
+  const t = useMemo(() => getTranslations(lang), [lang]);
+  
+  if (!personalityType || !description) {
+    return <ResultsSkeleton t={t} />;
+  }
+  
+  const group = personalityGroups[personalityType] || "Default";
+  const Icon = personalityIcons[group] || personalityIcons["Default"];
+
+  return (
+    <main className="flex min-h-screen items-center justify-center p-4 bg-background">
+      <Card className="w-full max-w-2xl shadow-2xl animate-fade-in">
+        <CardHeader className="text-center items-center">
+          <div className="bg-accent/20 p-4 rounded-full w-fit mb-4">
+             <Icon className="h-12 w-12 text-accent-foreground" />
+          </div>
+          <p className="text-muted-foreground font-medium">{t.resultTitle}</p>
+          <CardTitle className="text-5xl font-bold text-primary tracking-wider">
+            {personalityType}
+          </CardTitle>
+          <Badge variant="secondary" className="mt-2">{group}</Badge>
+        </CardHeader>
+        <CardContent className="px-6 md:px-8">
+            <Separator className="my-4" />
+            <p className="text-center text-lg text-foreground/80">
+                {description}
+            </p>
+            <Separator className="my-4" />
+            <div className="text-center">
+                <h3 className="text-xl font-semibold mb-2">Detailed Insights</h3>
+                <p className="text-muted-foreground">More detailed analysis about your personality type will be available soon.</p>
+            </div>
+        </CardContent>
+        <CardFooter>
+          <Button asChild size="lg" className="w-full text-lg">
+            <Link href={`/?lang=${lang}`}>{t.takeAgain}</Link>
+          </Button>
+        </CardFooter>
+        <style jsx>{`
+            @keyframes fade-in {
+                from { opacity: 0; transform: scale(0.95); }
+                to { opacity: 1; transform: scale(1); }
+            }
+            .animate-fade-in {
+                animation: fade-in 0.5s ease-out forwards;
+            }
+        `}</style>
+      </Card>
+    </main>
+  );
+}
+
+function ResultsSkeleton({ t }: {t: any}) {
+    return (
+        <main className="flex min-h-screen items-center justify-center p-4 bg-background">
+            <Card className="w-full max-w-2xl shadow-2xl">
+                <CardHeader className="text-center items-center">
+                    <Skeleton className="h-24 w-24 rounded-full mb-4" />
+                    <Skeleton className="h-6 w-48 mb-2" />
+                    <Skeleton className="h-14 w-32 mb-2" />
+                    <Skeleton className="h-6 w-24" />
+                </CardHeader>
+                <CardContent className="px-6 md:px-8">
+                    <Separator className="my-4" />
+                    <Skeleton className="h-5 w-full mb-2" />
+                    <Skeleton className="h-5 w-full mb-2" />
+                    <Skeleton className="h-5 w-3/4" />
+                    <Separator className="my-4" />
+                </CardContent>
+                <CardFooter>
+                    <Button size="lg" className="w-full text-lg" disabled>
+                        {t.takeAgain}
+                    </Button>
+                </CardFooter>
+            </Card>
+        </main>
+    )
+}
+
+
+export default function ResultsPage() {
+    return (
+        <Suspense fallback={<ResultsSkeleton t={getTranslations('ko')} />}>
+            <ResultsDisplay />
+        </Suspense>
+    )
+}
