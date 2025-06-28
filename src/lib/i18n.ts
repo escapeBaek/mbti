@@ -465,11 +465,11 @@ export const translations: Record<Language, TranslationSet> = {
 export const getTranslations = (lang: Language) => translations[lang];
 
 export const getResponseOptions = (t: (typeof translations)[Language]) => [
-  { value: 7, label: `${t.responseStrongly} ${t.agree}` },
-  { value: 6, label: t.agree },
-  { value: 5, label: `${t.responseSlightly} ${t.agree}` },
-  { value: 4, label: t.neutral },
-  { value: 3, label: `${t.responseSlightly} ${t.disagree}` },
-  { value: 2, label: t.disagree },
   { value: 1, label: `${t.responseStrongly} ${t.disagree}` },
+  { value: 2, label: t.disagree },
+  { value: 3, label: `${t.responseSlightly} ${t.disagree}` },
+  { value: 4, label: t.neutral },
+  { value: 5, label: `${t.responseSlightly} ${t.agree}` },
+  { value: 6, label: t.agree },
+  { value: 7, label: `${t.responseStrongly} ${t.agree}` },
 ];
