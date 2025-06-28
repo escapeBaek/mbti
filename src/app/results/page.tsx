@@ -36,7 +36,7 @@ function ResultsDisplay() {
   const description = searchParams.get('desc');
   const strengthsParam = searchParams.get('strengths');
   const weaknessesParam = searchParams.get('weaknesses');
-  const careerPathsParam = searchParams.get('careerPaths');
+  const careerPathsParam = search-params.get('careerPaths');
   const relationships = searchParams.get('relationships');
 
   const t = useMemo(() => getTranslations(lang), [lang]);
@@ -48,40 +48,59 @@ function ResultsDisplay() {
   const handleShare = async () => {
     if (!personalityType || !description) return;
 
+    const shareUrl = window.location.href;
     const shareData = {
       title: `${t.shareTitle}: ${personalityType}`,
       text: description,
-      url: window.location.href,
+      url: shareUrl,
     };
-
-    try {
-      if (navigator.share) {
+    
+    // Primary method: Web Share API (mobile)
+    if (navigator.share) {
+      try {
         await navigator.share(shareData);
-      } else {
-        await navigator.clipboard.writeText(window.location.href);
-        toast({
-          description: t.linkCopied,
-        });
-      }
-    } catch (err) {
-      // Don't show an error if the user cancels the share dialog
-      if (err instanceof Error && err.name === 'AbortError') {
         return;
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          return; // User cancelled, do nothing
+        }
+        console.error('Web Share API failed, falling back.', err);
       }
+    }
 
-      console.error('Share failed:', err);
-
-      let errorMessage = t.linkCopyError;
-      // In some browsers, clipboard access can be denied, resulting in a NotAllowedError.
-      if (err instanceof Error && err.name === 'NotAllowedError') {
-        errorMessage = t.clipboardPermissionError;
-      }
-      
+    // Fallback 1: Modern Clipboard API (desktop)
+    try {
+      await navigator.clipboard.writeText(shareUrl);
       toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: errorMessage,
+        description: t.linkCopied,
       });
+      return;
+    } catch (err) {
+      console.error('Clipboard API failed, trying legacy fallback.', err);
+    }
+    
+    // Fallback 2: Legacy execCommand
+    const textArea = document.createElement("textarea");
+    textArea.value = shareUrl;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.select();
+    
+    try {
+      document.execCommand('copy');
+      toast({
+        description: t.linkCopied,
+      });
+    } catch (err) {
+      console.error('Legacy copy command failed.', err);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: t.linkCopyError,
+      });
+    } finally {
+      document.body.removeChild(textArea);
     }
   };
 
