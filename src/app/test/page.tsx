@@ -162,27 +162,27 @@ function PersonalityTest() {
               {currentQuestion?.text}
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col items-center gap-3 p-6">
-             <div className="flex w-full justify-center items-center gap-1.5 sm:gap-2">
-              {responseOptions.map(({ value, label }) => (
-                <button
-                  key={value}
-                  onClick={() => handleAnswer(value)}
-                  aria-label={label}
-                  className={cn(
-                    "group relative flex cursor-pointer items-center justify-center rounded-full border-transparent transition-all duration-200 hover:scale-110",
-                    getOptionStyle(value)
-                  )}
-                >
-                  <span className="absolute top-full mt-2 hidden w-max rounded-md bg-foreground px-2 py-1 text-xs text-background opacity-0 transition-opacity group-hover:block group-hover:opacity-100">
-                    {label}
-                  </span>
-                </button>
-              ))}
-             </div>
-            <div className="flex justify-between w-full max-w-xs sm:max-w-sm">
-                <span className="text-sm font-medium text-destructive">{t.disagree}</span>
-                <span className="text-sm font-medium text-primary">{t.agree}</span>
+          <CardContent className="flex items-center justify-center p-6">
+            <div className="flex w-full items-center justify-center gap-2 sm:gap-4">
+                <span className="w-16 shrink-0 text-right font-medium text-destructive sm:w-20">{t.disagree}</span>
+                <div className="flex flex-grow items-center justify-center gap-1.5 sm:gap-2">
+                    {responseOptions.map(({ value, label }) => (
+                    <button
+                        key={value}
+                        onClick={() => handleAnswer(value)}
+                        aria-label={label}
+                        className={cn(
+                        "group relative flex cursor-pointer items-center justify-center rounded-full border-transparent transition-all duration-200 hover:scale-110",
+                        getOptionStyle(value)
+                        )}
+                    >
+                        <span className="absolute top-full mt-2 hidden w-max rounded-md bg-foreground px-2 py-1 text-xs text-background opacity-0 transition-opacity group-hover:block group-hover:opacity-100">
+                        {label}
+                        </span>
+                    </button>
+                    ))}
+                </div>
+                <span className="w-16 shrink-0 text-left font-medium text-primary sm:w-20">{t.agree}</span>
             </div>
           </CardContent>
         </Card>
