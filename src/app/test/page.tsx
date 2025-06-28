@@ -2,9 +2,10 @@
 
 import React, { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { LoaderCircle, AlertCircle } from 'lucide-react';
+import { LoaderCircle, AlertCircle, Home } from 'lucide-react';
+import Link from 'next/link';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -99,7 +100,7 @@ function PersonalityTest() {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
-          <Button onClick={() => router.push('/')} className="mt-4">
+          <Button onClick={() => router.push(`/?lang=${lang}`)} className="mt-4">
             {t.takeAgain}
           </Button>
         </Alert>
@@ -108,7 +109,15 @@ function PersonalityTest() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 md:p-8">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 md:p-8 relative">
+       <div className="absolute top-4 left-4 sm:top-6 sm:left-6 md:top-8 md:left-8">
+        <Button asChild variant="outline" size="icon">
+          <Link href={`/?lang=${lang}`}>
+            <Home className="h-5 w-5" />
+            <span className="sr-only">Home</span>
+          </Link>
+        </Button>
+      </div>
       <div className="w-full max-w-2xl">
         <div className="mb-4">
           <p className="text-sm font-medium text-primary mb-1 text-center">
@@ -120,7 +129,7 @@ function PersonalityTest() {
         <Card key={currentQuestionIndex} className={`shadow-xl transition-all duration-300 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
           <CardHeader>
             <CardTitle className="text-2xl font-semibold text-center leading-tight">
-              {t.questions[currentQuestion.id] || currentQuestion.text}
+              {t.questions[currentQuestion.id.toString()]}
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-2 p-4 pt-0">
