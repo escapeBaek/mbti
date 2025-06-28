@@ -36,7 +36,7 @@ function ResultsDisplay() {
   const description = searchParams.get('desc');
   const strengthsParam = searchParams.get('strengths');
   const weaknessesParam = searchParams.get('weaknesses');
-  const careerPathsParam = search-params.get('careerPaths');
+  const careerPathsParam = searchParams.get('careerPaths');
   const relationships = searchParams.get('relationships');
 
   const t = useMemo(() => getTranslations(lang), [lang]);
