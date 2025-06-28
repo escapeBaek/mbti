@@ -11,6 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
+import { cn } from "@/lib/utils";
 import { type Language, getTranslations, getResponseOptions } from '@/lib/i18n';
 import { questions } from '@/data/questions';
 import { analyzePersonality } from '@/ai/flows/analyze-personality';
@@ -88,6 +89,19 @@ function PersonalityTest() {
     submitAnswers();
   }, [answers, lang, router, t, toast]);
 
+  const getOptionStyle = (value: number) => {
+    switch (value) {
+      case 1: return 'w-10 h-10 sm:w-12 sm:h-12 bg-red-600 hover:bg-red-700';
+      case 2: return 'w-8 h-8 sm:w-10 sm:h-10 bg-red-500 hover:bg-red-600';
+      case 3: return 'w-7 h-7 sm:w-8 sm:h-8 bg-red-400 hover:bg-red-500';
+      case 4: return 'w-6 h-6 sm:w-7 sm:h-7 bg-slate-400 hover:bg-slate-500';
+      case 5: return 'w-7 h-7 sm:w-8 sm:h-8 bg-green-400 hover:bg-green-500';
+      case 6: return 'w-8 h-8 sm:w-10 sm:h-10 bg-green-500 hover:bg-green-600';
+      case 7: return 'w-10 h-10 sm:w-12 sm:h-12 bg-green-600 hover:bg-green-700';
+      default: return 'h-8 w-8';
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center">
@@ -136,23 +150,26 @@ function PersonalityTest() {
               {t.questions[currentQuestion.id.toString()]}
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-2 p-4 pt-0">
-             <span className="text-sm font-medium text-red-500">{t.disagree}</span>
-             <div className="flex items-center justify-center gap-1 sm:gap-2">
+          <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 pt-2">
+             <span className="text-sm font-medium text-red-600">{t.disagree}</span>
+             <div className="flex w-full justify-center items-center gap-1.5 sm:gap-2">
               {responseOptions.map(({ value, label }) => (
                 <button
                   key={value}
                   onClick={() => handleAnswer(value)}
                   aria-label={label}
-                  className="group relative flex h-8 w-8 sm:h-10 sm:w-10 cursor-pointer items-center justify-center rounded-full border-2 border-primary/20 bg-background transition-all duration-200 hover:border-primary hover:scale-110"
+                  className={cn(
+                    "group relative flex cursor-pointer items-center justify-center rounded-full border-transparent transition-all duration-200 hover:scale-110",
+                    getOptionStyle(value)
+                  )}
                 >
-                  <span className="absolute -top-6 hidden rounded-md bg-foreground px-2 py-1 text-xs text-background opacity-0 transition-opacity group-hover:block group-hover:opacity-100">
+                  <span className="absolute top-full mt-2 hidden w-max rounded-md bg-foreground px-2 py-1 text-xs text-background opacity-0 transition-opacity group-hover:block group-hover:opacity-100">
                     {label}
                   </span>
                 </button>
               ))}
              </div>
-             <span className="text-sm font-medium text-green-500">{t.agree}</span>
+             <span className="text-sm font-medium text-green-600">{t.agree}</span>
           </CardContent>
         </Card>
       </div>
