@@ -64,11 +64,23 @@ function ResultsDisplay() {
         });
       }
     } catch (err) {
+      // Don't show an error if the user cancels the share dialog
+      if (err instanceof Error && err.name === 'AbortError') {
+        return;
+      }
+
       console.error('Share failed:', err);
+
+      let errorMessage = t.linkCopyError;
+      // In some browsers, clipboard access can be denied, resulting in a NotAllowedError.
+      if (err instanceof Error && err.name === 'NotAllowedError') {
+        errorMessage = t.clipboardPermissionError;
+      }
+      
       toast({
           variant: 'destructive',
           title: 'Error',
-          description: `${t.linkCopyError} ${err}`,
+          description: errorMessage,
       });
     }
   };

@@ -35,6 +35,7 @@ type TranslationSet = {
   linkCopied: string;
   linkCopyError: string;
   shareTitle: string;
+  clipboardPermissionError: string;
 };
 
 
@@ -127,6 +128,7 @@ export const translations: Record<Language, TranslationSet> = {
     linkCopied: '링크가 클립보드에 복사되었습니다!',
     linkCopyError: '링크를 복사할 수 없습니다:',
     shareTitle: '결과 공유',
+    clipboardPermissionError: '클립보드 접근이 거부되었습니다. 브라우저 설정을 확인해주세요.',
   },
   en: {
     welcomeTitle: 'Discover Your Personality Type',
@@ -216,6 +218,7 @@ export const translations: Record<Language, TranslationSet> = {
     linkCopied: 'Link copied to clipboard!',
     linkCopyError: 'Could not copy link:',
     shareTitle: 'Share Your Results',
+    clipboardPermissionError: 'Clipboard access was denied. Please check your browser settings.',
   },
   ja: {
     welcomeTitle: 'あなたの性格タイプを発見する',
@@ -305,6 +308,7 @@ export const translations: Record<Language, TranslationSet> = {
     linkCopied: 'リンクがクリップボードにコピーされました！',
     linkCopyError: 'リンクをコピーできませんでした:',
     shareTitle: '結果を共有',
+    clipboardPermissionError: 'クリップボードへのアクセスが拒否されました。ブラウザの設定を確認してください。',
   },
   zh: {
     welcomeTitle: '发现您的性格类型',
@@ -394,6 +398,7 @@ export const translations: Record<Language, TranslationSet> = {
     linkCopied: '链接已复制到剪贴板！',
     linkCopyError: '无法复制链接：',
     shareTitle: '分享你的结果',
+    clipboardPermissionError: '剪贴板权限被拒绝。请检查您的浏览器设置。',
   },
   es: {
     welcomeTitle: 'Descubre tu tipo de personalidad',
@@ -483,6 +488,7 @@ export const translations: Record<Language, TranslationSet> = {
     linkCopied: '¡Enlace copiado al portapapeles!',
     linkCopyError: 'No se pudo copiar el enlace:',
     shareTitle: 'Comparte tus resultados',
+    clipboardPermissionError: 'Se denegó el permiso al portapapeles. Por favor, revisa la configuración de tu navegador.',
   },
 };
 
